@@ -2,6 +2,7 @@ require 'rspec-system-foreman'
 require 'rspec-system-puppet/helpers'
 require 'rspec-system-foreman/helpers/foreman_install'
 require 'rspec-system-foreman/helpers/foreman_installer_install'
+require 'rspec-system-foreman/helpers/foreman_cli'
 
 # This module contains the methods provide by rspec-system-foreman
 module RSpecSystemForeman::Helpers
@@ -33,5 +34,20 @@ module RSpecSystemForeman::Helpers
   # @yieldparam result [RSpecSystem::Helpers::ForemanInstall] results
   def foreman_install(opts = {}, &block)
     RSpecSystemForeman::Helpers::ForemanInstall.new(opts, self, &block)
+  end
+
+  # Runs foremancli and returns the parsed result
+  #
+  # @param opts [Hash] a hash of opts
+  # @option opts [RSpecSystem::Node] :node node to execute DSL on
+  # @option opts [String] :url optional URL, defaults to https://node
+  # @option opts [String] :user optional username, defaults to admin
+  # @option opts [String] :password optional username, defaults to changeme
+  # @option opts [String] :command arguments to foremancli
+  # @return [RSpecSystemForeman::Helpers::ForemanCli] results
+  # @yield [result] yields result when called as a block
+  # @yieldparam result [RSpecSystem::Helpers::ForemanCli] results
+  def foreman_cli(opts = {}, &block)
+    RSpecSystemForeman::Helpers::ForemanCli.new(opts, self, &block)
   end
 end

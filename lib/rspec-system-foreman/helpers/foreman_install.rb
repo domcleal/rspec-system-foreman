@@ -48,7 +48,16 @@ module RSpecSystem::Helpers
       end
 
       # Run foreman-installer
-      puppet_apply(:code => 'class { "foreman_installer": }', :n => node, :module_path => '/usr/share/foreman-installer')
+      puppet_apply(:code => 'class { "foreman_installer": }', :n => node, :module_path => '/usr/share/foreman-installer') do |r|
+        r.exit_code.should == 2
+      end
+
+      # Install foremancli
+      cmd = 'gem install foremancli'
+      cmd = "scl enable ruby193 '#{cmd}'" if facts['osfamily'] == 'RedHat' && facts['operatingsystem'] != 'Fedora'
+      shell :c => cmd, :n => node do |r|
+        r.exit_code.should == 0
+      end
 
       {}
     end
